@@ -80,9 +80,9 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 
 const storyBreakpoints = {
   sun: 0.045,
-  time: 0.17,
-  overlays: 0.31,
-  uv: 0.42
+  time: 0.145,
+  overlays: 0.38,
+  uv: 0.47
 };
 
 const overlayIcons = {
@@ -240,7 +240,7 @@ function StoryMap({ progress, activeStep }) {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    const heldProgress = Math.max(0, (timeProgress - 0.38) / 0.62);
+    const heldProgress = Math.max(0, (timeProgress - 0.24) / 0.76);
     setDateFrame(Math.min(2, Math.floor(heldProgress * 3)));
   });
 
@@ -435,7 +435,7 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-86px] top-[31vh] z-20 hidden h-[54vh] w-[560px] lg:block"
+        className="absolute right-[-300px] top-[31vh] z-20 hidden h-[54vh] w-[560px] lg:block"
         animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
@@ -742,7 +742,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[620vh]" />
+      <div className="relative z-10 h-[470vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
