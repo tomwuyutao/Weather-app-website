@@ -69,10 +69,9 @@ const backgroundDots = [
 ];
 
 const appNotes = [
-  ["Native", "Built for iPhone, iPad, and Mac instead of feeling like a wrapped website."],
-  ["Fast", "A lightweight map-first interface for quick checks and saved places."],
-  ["Minimal", "Weather dots, city lists, and clean forecast views without extra dashboard noise."],
-  ["Familiar", "Designed around system controls, dark mode, and simple everyday use."]
+  ["Free", "Completely free to use."],
+  ["Fast", "Native performance on iPhone, iPad, and Mac."],
+  ["Minimal", "Weather dots, saved places, and clean forecast views without extra dashboard noise."]
 ];
 
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -480,19 +479,19 @@ function ScrollCopy({ activeStep }) {
     () => [
       {
         title: "Weather, spatially.",
-        body: "Quickly compare weather conditions across the places you care about."
+        body: "Quickly compare weather conditions across places."
       },
       {
         title: "Find where it is sunny.",
-        body: "Zoom from the wider map into a place that looks good, then check the simple forecast."
+        body: "Instead of opening forecasts for dozens of cities one by one, see where conditions look good at a glance."
       },
       {
         title: "See how weather changes.",
-        body: "Move through the date slider and the dots change together, helping you find a time and place that should be sunny."
+        body: "Use the date slider to find a good time for your trip."
       },
       {
         title: "Choose what the map shows.",
-        body: "Switch from weather to temperature, cloud cover, wind speed, UV index, humidity, visibility, and more."
+        body: "Switch from weather conditions to cloud cover, UV index, visibility, and more."
       }
     ],
     []
@@ -616,7 +615,7 @@ function NativeMapPreview() {
             <p className="mt-3 text-xl font-semibold">Berlin</p>
           </div>
           <div className="flex min-w-[118px] flex-col items-end justify-between pb-0.5 pt-1">
-            <WeatherIcon type="sun" color="#FF8A65" />
+            <span className="mt-2 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
             <div className="grid grid-cols-5 gap-1.5">
               {["#F4B65E", "#6E83B6", "#D3E3EC", "#D3E3EC", "#D9826F", "#D9826F", "#E99573", "#E99573", "#E99573", "#D9826F"].map((color, index) => (
                 <span key={index} className="h-2 w-2 rounded-full" style={{ background: color, opacity: index < 5 ? 0.78 : 0.9 }} />
@@ -635,10 +634,10 @@ function AppReveal() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-3xl">
           <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">
-            A native weather app that stays fast.
+            Native performance, simple weather.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-weather-muted/68">
-            Save places, check the map, and compare simple forecasts without a heavy dashboard. Built for iPhone, iPad, and Mac.
+            A lightweight weather map for saved places, quick checks, and everyday planning on iPhone, iPad, and Mac.
           </p>
         </div>
 
@@ -670,7 +669,7 @@ function AppReveal() {
           <NativeMapPreview />
         </div>
 
-        <div className="mt-16 grid gap-5 md:grid-cols-4">
+        <div className="mt-16 grid gap-5 md:grid-cols-3">
           {appNotes.map(([title, body]) => (
             <div key={title} className="border-t border-white/12 pt-5">
               <h3 className="text-base font-semibold text-weather-text">{title}</h3>
@@ -691,7 +690,7 @@ function DownloadFooter() {
       <div className="mx-auto max-w-7xl border-t border-white/10 pt-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:items-end">
           <div className="max-w-2xl">
-            <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">A quiet weather map for your places.</h2>
+            <h2 className="text-4xl font-semibold leading-tight tracking-normal text-weather-text md:text-6xl">Try Weather Map today, completely free.</h2>
           </div>
           <div className="rounded-[28px] border border-white/10 bg-[#423D74]/44 p-5 shadow-atmospheric backdrop-blur-2xl">
             <a
