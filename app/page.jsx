@@ -603,8 +603,9 @@ function NativeMapPreview() {
         >
           {selected ? (
             <span className="relative inline-flex h-10 w-10 items-center justify-center">
-              <span className="absolute h-20 w-20 rounded-full bg-[#FF8A65]/18 blur-2xl" />
-              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_30px_rgba(255,138,101,0.62)]" />
+              <span className="absolute h-24 w-24 rounded-full bg-[#FF8A65]/24 blur-3xl" />
+              <span className="absolute h-14 w-14 rounded-full bg-[#FF8A65]/16 blur-xl" />
+              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_34px_rgba(255,138,101,0.7)]" />
             </span>
           ) : (
             <span
@@ -622,7 +623,7 @@ function NativeMapPreview() {
             <p className="mt-3 text-xl font-semibold">Berlin</p>
           </div>
           <div className="flex min-w-[118px] flex-col items-end justify-between pb-0.5 pt-1">
-            <span className="mr-[18px] mt-9 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
+            <span className="mr-[18px] mt-6 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
             <div className="grid grid-cols-5 gap-1.5">
               {["#F4B65E", "#6E83B6", "#D3E3EC", "#D3E3EC", "#D9826F", "#D9826F", "#E99573", "#E99573", "#E99573", "#D9826F"].map((color, index) => (
                 <span key={index} className="h-2 w-2 rounded-full" style={{ background: color, opacity: index < 5 ? 0.78 : 0.9 }} />
