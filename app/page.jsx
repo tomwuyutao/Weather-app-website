@@ -691,7 +691,11 @@ function AppReveal() {
 }
 
 function DownloadFooter() {
-  const links = ["Request a feature", "Contact", "Privacy Policy"];
+  const links = [
+    ["Request a feature", "#"],
+    ["Contact", "#"],
+    ["Privacy Policy", publicAsset("/privacy/")]
+  ];
 
   return (
     <section className="relative z-20 px-5 pb-12 pt-8 md:px-10 lg:px-16">
@@ -715,9 +719,9 @@ function DownloadFooter() {
         <footer className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
           <p className="text-sm text-weather-cloud/52">Weather, on a map.</p>
           <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-weather-cloud/64">
-            {links.map((link) => (
-              <a key={link} href="#" className="transition hover:text-weather-text">
-                {link}
+            {links.map(([label, href]) => (
+              <a key={label} href={href} className="transition hover:text-weather-text">
+                {label}
               </a>
             ))}
           </nav>
