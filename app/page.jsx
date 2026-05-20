@@ -81,7 +81,7 @@ const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
   overlays: 0.58,
-  uv: 0.74
+  uv: 0.68
 };
 
 const overlayIcons = {
@@ -188,8 +188,8 @@ function StoryMap({ progress, activeStep }) {
   const [projectedDots, setProjectedDots] = useState({ background: [], cities: [] });
   const [dateFrame, setDateFrame] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
-  const mapScale = useTransform(progress, [0, 0.72, 0.9], [1.03, 1.01, 0.98]);
-  const mapOpacity = useTransform(progress, [0.78, 0.88], [1, 0]);
+  const mapScale = useTransform(progress, [0, 0.78, 0.96], [1.03, 1.01, 0.98]);
+  const mapOpacity = useTransform(progress, [0.86, 0.94], [1, 0]);
   const uiOpacity = useTransform(progress, [0.6, 0.8], [0, 1]);
   const uiY = useTransform(progress, [0.6, 0.8], [28, 0]);
   const atmosphereOpacity = useTransform(progress, [0.06, 0.62], [0.42, 0.9]);
@@ -739,7 +739,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[700vh]" />
+      <div className="relative z-10 h-[850vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
