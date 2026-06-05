@@ -185,6 +185,7 @@ function applyMinimalMapStyle(mapInstance) {
 function StoryMap({ progress, activeStep }) {
   const mapNode = useRef(null);
   const map = useRef(null);
+  const [isCompactMap, setIsCompactMap] = useState(() => (typeof window === "undefined" ? false : window.matchMedia("(max-width: 767px)").matches));
   const [projectedDots, setProjectedDots] = useState({ background: [], cities: [] });
   const [dateFrame, setDateFrame] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
@@ -233,6 +234,14 @@ function StoryMap({ progress, activeStep }) {
     ["visibility", "Visibility"]
   ];
 
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsCompactMap(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
   useMotionValueEvent(progress, "change", (latest) => {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
@@ -244,6 +253,9 @@ function StoryMap({ progress, activeStep }) {
 
   useEffect(() => {
     if (!mapNode.current || map.current) return;
+    const testCanvas = document.createElement("canvas");
+    const hasWebGl = Boolean(testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"));
+    if (!hasWebGl) return;
 
     const projectDots = () => {
       if (!map.current) return;
@@ -259,23 +271,29 @@ function StoryMap({ progress, activeStep }) {
       });
     };
 
-    map.current = new maplibregl.Map({
-      container: mapNode.current,
-      style: "https://tiles.openfreemap.org/styles/dark",
-      center: [12, 48.5],
-      zoom: 3.55,
-      attributionControl: false,
-      scrollZoom: false,
-      doubleClickZoom: false,
-      dragRotate: false,
-      pitch: 0,
-      bearing: 0
-    });
+    const initialView = isCompactMap ? { center: [10, 48.5], zoom: 2.72 } : { center: [12, 48.5], zoom: 3.55 };
+
+    try {
+      map.current = new maplibregl.Map({
+        container: mapNode.current,
+        style: "https://tiles.openfreemap.org/styles/dark",
+        center: initialView.center,
+        zoom: initialView.zoom,
+        attributionControl: false,
+        scrollZoom: false,
+        doubleClickZoom: false,
+        dragRotate: false,
+        pitch: 0,
+        bearing: 0
+      });
+    } catch {
+      return;
+    }
 
     map.current.once("load", () => {
       applyMinimalMapStyle(map.current);
       map.current.resize();
-      map.current.jumpTo({ center: [12, 48.5], zoom: 3.55, bearing: 0, pitch: 0 });
+      map.current.jumpTo({ ...initialView, bearing: 0, pitch: 0 });
       projectDots();
       window.setTimeout(() => map.current?.resize(), 250);
       window.setTimeout(() => {
@@ -298,17 +316,24 @@ function StoryMap({ progress, activeStep }) {
       map.current?.remove();
       map.current = null;
     };
-  }, []);
+  }, [isCompactMap]);
 
   useEffect(() => {
     if (!map.current) return;
 
-    const views = [
-      { center: [12, 48.5], zoom: 3.55 },
-      { center: [-9.14, 38.72], zoom: 5.25 },
-      { center: [8, 49], zoom: 3.75 },
-      { center: [12, 50], zoom: 3.55 }
-    ];
+    const views = isCompactMap
+      ? [
+          { center: [10, 48.5], zoom: 2.72 },
+          { center: [-8.4, 40.2], zoom: 3.95 },
+          { center: [10, 49], zoom: 2.86 },
+          { center: [12, 50], zoom: 2.78 }
+        ]
+      : [
+          { center: [12, 48.5], zoom: 3.55 },
+          { center: [-9.14, 38.72], zoom: 5.25 },
+          { center: [8, 49], zoom: 3.75 },
+          { center: [12, 50], zoom: 3.55 }
+        ];
 
     map.current.easeTo({
       ...views[activeStep],
@@ -317,7 +342,7 @@ function StoryMap({ progress, activeStep }) {
       duration: 1250,
       easing: (t) => 1 - Math.pow(1 - t, 3)
     });
-  }, [activeStep]);
+  }, [activeStep, isCompactMap]);
 
   return (
     <motion.div
@@ -325,7 +350,7 @@ function StoryMap({ progress, activeStep }) {
       className="fixed inset-0 z-0 overflow-hidden bg-weather-night"
       style={{ scale: mapScale, opacity: mapOpacity }}
     >
-      <div className="absolute bottom-[24vh] left-[-56vw] right-[-18vw] top-[-16vh] opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
+      <div className="absolute bottom-[34vh] left-[-14vw] right-[-14vw] top-[4vh] opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
         <div ref={mapNode} className="absolute inset-0" />
         <div className="cinematic-noise pointer-events-none absolute inset-0 mix-blend-soft-light opacity-[0.06]" />
         <motion.div
@@ -552,6 +577,9 @@ function NativeMapPreview() {
 
   useEffect(() => {
     if (!mapNode.current || map.current) return;
+    const testCanvas = document.createElement("canvas");
+    const hasWebGl = Boolean(testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"));
+    if (!hasWebGl) return;
 
     const projectPreviewDots = () => {
       if (!map.current) return;
@@ -563,16 +591,20 @@ function NativeMapPreview() {
       );
     };
 
-    map.current = new maplibregl.Map({
-      container: mapNode.current,
-      style: "https://tiles.openfreemap.org/styles/dark",
-      center: [13, 52],
-      zoom: 3.25,
-      attributionControl: false,
-      interactive: false,
-      pitch: 0,
-      bearing: 0
-    });
+    try {
+      map.current = new maplibregl.Map({
+        container: mapNode.current,
+        style: "https://tiles.openfreemap.org/styles/dark",
+        center: [13, 52],
+        zoom: 3.25,
+        attributionControl: false,
+        interactive: false,
+        pitch: 0,
+        bearing: 0
+      });
+    } catch {
+      return;
+    }
 
     map.current.once("load", () => {
       applyMinimalMapStyle(map.current);
@@ -747,7 +779,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[1000vh]" />
+      <div className="relative z-10 h-[1200vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
