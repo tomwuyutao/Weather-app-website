@@ -188,8 +188,8 @@ function StoryMap({ progress, activeStep }) {
   const [projectedDots, setProjectedDots] = useState({ background: [], cities: [] });
   const [dateFrame, setDateFrame] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
-  const mapScale = useTransform(progress, [0, 0.78, 0.96], [1.03, 1.01, 0.98]);
-  const mapOpacity = useTransform(progress, [0.86, 0.94], [1, 0]);
+  const mapScale = useTransform(progress, [0, 0.86, 0.99], [1.03, 1.01, 0.98]);
+  const mapOpacity = useTransform(progress, [0.91, 0.98], [1, 0]);
   const uiOpacity = useTransform(progress, [0.6, 0.8], [0, 1]);
   const uiY = useTransform(progress, [0.6, 0.8], [28, 0]);
   const atmosphereOpacity = useTransform(progress, [0.06, 0.62], [0.42, 0.9]);
@@ -461,11 +461,16 @@ function StoryMap({ progress, activeStep }) {
           {overlayOptions.map(([type, label]) => {
             const isSelected = selectedOverlay === type;
             const selectedColor = type === "uv" ? "#E66262" : "#F4B65E";
+            const selectedBg = type === "uv" ? "rgba(230, 98, 98, 0.16)" : "rgba(244, 182, 94, 0.16)";
             const color = isSelected ? selectedColor : "#FFFFFF";
             return (
             <div
               key={label}
-              className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-[18px] py-1 transition ${isSelected ? "text-white" : "text-white/88"}`}
+              className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-full px-4 py-3 transition duration-700 ${isSelected ? "text-white" : "text-white/88"}`}
+              style={{
+                backgroundColor: isSelected ? selectedBg : "rgba(255, 255, 255, 0)",
+                boxShadow: isSelected ? `0 0 36px ${selectedBg}` : "none"
+              }}
             >
               <IconMask src={overlayIcons[type]} color={color} className="h-9 w-9" glow={isSelected && type === "uv"} />
               <span className="text-3xl font-medium transition" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
@@ -742,7 +747,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[850vh]" />
+      <div className="relative z-10 h-[1000vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
