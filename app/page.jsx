@@ -564,21 +564,21 @@ function DownloadFooter() {
   ];
 
   return (
-    <section className="relative z-20 flex min-h-screen flex-col overflow-hidden bg-[#F3F0EA] text-[#2E2961]">
+    <section className="relative z-20 flex min-h-screen flex-col overflow-hidden bg-[#17152F] text-weather-text">
       <div className="relative flex min-h-[52vh] items-center justify-center overflow-hidden px-5 py-24 text-center md:px-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(244,182,94,0.24),transparent_28%),radial-gradient(circle_at_28%_62%,rgba(101,171,227,0.18),transparent_34%),linear-gradient(180deg,#F8F5EF_0%,#DDD6EC_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(244,182,94,0.16),transparent_30%),radial-gradient(circle_at_28%_62%,rgba(101,171,227,0.14),transparent_34%),linear-gradient(180deg,#211E49_0%,#17152F_100%)]" />
         <div className="relative mx-auto max-w-4xl">
           <h2 className="text-5xl font-semibold leading-[0.95] tracking-normal md:text-7xl lg:text-8xl">
             Try Weather Atlas today, completely free.
           </h2>
           <a
-            className="mx-auto mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-[#2E2961] px-8 text-base font-semibold text-white shadow-[0_18px_55px_rgba(46,41,97,0.2)] transition hover:bg-[#211E49]"
+            className="mx-auto mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-weather-light px-8 text-base font-semibold text-[#2E2961] shadow-bloom transition hover:bg-white"
             href="#"
             aria-label="Download on the App Store"
           >
             Download on the App Store
           </a>
-          <p className="mt-4 text-sm leading-6 text-[#2E2961]/54">App Store link placeholder.</p>
+          <p className="mt-4 text-sm leading-6 text-weather-muted/58">App Store link placeholder.</p>
         </div>
       </div>
 
@@ -586,12 +586,12 @@ function DownloadFooter() {
         <div className="mx-auto grid w-full max-w-7xl gap-12 md:grid-cols-[1.2fr_1fr_1fr] md:items-start">
           <div>
             <div className="flex items-center gap-4">
-              <span className="h-10 w-10 rounded-full border border-[#2E2961]/10 bg-[#F4B65E] shadow-[0_0_28px_rgba(244,182,94,0.45)]" />
+              <span className="h-10 w-10 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_28px_rgba(244,182,94,0.45)]" />
               <p className="text-4xl font-semibold tracking-normal">Weather Atlas</p>
             </div>
-            <p className="mt-7 max-w-sm text-xl leading-8 text-[#2E2961]/72">Weather, on a map.</p>
+            <p className="mt-7 max-w-sm text-xl leading-8 text-weather-muted/70">Weather, on a map.</p>
             <a
-              className="mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-[#111111] px-7 text-base font-semibold text-white shadow-[0_16px_40px_rgba(17,17,17,0.14)]"
+              className="mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-weather-light px-7 text-base font-semibold text-[#2E2961] shadow-bloom"
               href="#"
               aria-label="Download on the App Store"
             >
@@ -601,9 +601,9 @@ function DownloadFooter() {
 
           <div>
             <h3 className="text-lg font-semibold">Support</h3>
-            <nav className="mt-6 flex flex-col gap-5 text-lg text-[#2E2961]/74">
+            <nav className="mt-6 flex flex-col gap-5 text-lg text-weather-muted/70">
               {links.map(([label, href]) => (
-                <a key={label} href={href} className="transition hover:text-[#2E2961]">
+                <a key={label} href={href} className="transition hover:text-weather-text">
                   {label}
                 </a>
               ))}
@@ -612,7 +612,7 @@ function DownloadFooter() {
 
           <div>
             <h3 className="text-lg font-semibold">Download</h3>
-            <p className="mt-6 max-w-xs text-lg leading-8 text-[#2E2961]/74">A small, private weather atlas for the places you care about.</p>
+            <p className="mt-6 max-w-xs text-lg leading-8 text-weather-muted/70">A small, private weather atlas for the places you care about.</p>
           </div>
         </div>
       </footer>
