@@ -233,6 +233,8 @@ function StoryMap({ progress, activeStep }) {
     ["humidity", "Humidity"],
     ["visibility", "Visibility"]
   ];
+  const selectedOverlayLabel = overlayOptions.find(([type]) => type === selectedOverlay)?.[1] ?? "Weather";
+  const selectedOverlayColor = selectedOverlay === "uv" ? "#E66262" : "#F4B65E";
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 767px)");
@@ -432,8 +434,6 @@ function StoryMap({ progress, activeStep }) {
                   initial={false}
                   animate={{
                     opacity: isActive ? 1 : 0,
-                    scale: isActive ? 1 : 0.94,
-                    x: isActive ? 0 : -14,
                     filter: isActive ? "blur(0px)" : "blur(8px)",
                     pointerEvents: isActive ? "auto" : "none"
                   }}
@@ -461,14 +461,14 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-190px] top-[22vh] z-20 h-[46vh] w-[410px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
+        className="absolute right-[-240px] top-[28vh] z-20 h-[42vh] w-[430px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
         animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative h-full w-full">
           <div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(90deg,rgba(46,41,97,0),rgba(46,41,97,0.14))]" />
           <motion.div
-            className="absolute left-0 flex h-14 min-w-[260px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-7 text-2xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:h-16 lg:min-w-[320px] lg:px-8 lg:text-3xl"
+            className="absolute left-0 flex h-12 min-w-[220px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-6 text-xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:h-16 lg:min-w-[320px] lg:px-8 lg:text-3xl"
             animate={{ top: dateSliderTop }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -478,11 +478,16 @@ function StoryMap({ progress, activeStep }) {
         </div>
       </motion.div>
       <motion.div
-        className="absolute right-4 top-[10vh] z-20 w-[min(88vw,340px)] rounded-[28px] border border-[#6F67C8]/55 bg-[#211E49]/88 p-5 text-weather-text shadow-atmospheric backdrop-blur-2xl lg:right-14 lg:top-24 lg:w-[390px] lg:rounded-[34px] lg:p-8"
-        animate={{ opacity: overlaySwitcherOpacity, x: overlaySwitcherOpacity ? 0 : 26, filter: overlaySwitcherOpacity ? "blur(0px)" : "blur(8px)" }}
+        className="absolute left-1/2 top-[10vh] z-20 w-auto -translate-x-1/2 rounded-full border border-[#6F67C8]/55 bg-[#211E49]/88 px-5 py-3 text-weather-text shadow-atmospheric backdrop-blur-2xl lg:left-auto lg:right-14 lg:top-24 lg:w-[390px] lg:translate-x-0 lg:rounded-[34px] lg:p-8"
+        animate={{ opacity: overlaySwitcherOpacity, filter: overlaySwitcherOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="space-y-2 lg:space-y-6">
+        <div className="flex items-center gap-3 lg:hidden">
+          <IconMask src={overlayIcons[selectedOverlay]} color={selectedOverlayColor} className="h-6 w-6" glow={selectedOverlay === "uv"} />
+          <span className="whitespace-nowrap text-xl font-semibold" style={{ color: selectedOverlayColor }}>{selectedOverlayLabel}</span>
+          <span className="text-2xl leading-none" style={{ color: selectedOverlayColor }}>✓</span>
+        </div>
+        <div className="hidden space-y-6 lg:block">
           {overlayOptions.map(([type, label]) => {
             const isSelected = selectedOverlay === type;
             const selectedColor = type === "uv" ? "#E66262" : "#F4B65E";
@@ -491,15 +496,15 @@ function StoryMap({ progress, activeStep }) {
             return (
             <div
               key={label}
-              className={`grid grid-cols-[38px_1fr_28px] items-center gap-3 rounded-full px-3 py-2 transition duration-700 lg:grid-cols-[54px_1fr_32px] lg:gap-4 lg:px-4 lg:py-3 ${isSelected ? "text-white" : "text-white/88"}`}
+              className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-full px-4 py-3 transition duration-700 ${isSelected ? "text-white" : "text-white/88"}`}
               style={{
                 backgroundColor: isSelected ? selectedBg : "rgba(255, 255, 255, 0)",
                 boxShadow: isSelected ? `0 0 36px ${selectedBg}` : "none"
               }}
             >
-              <IconMask src={overlayIcons[type]} color={color} className="h-6 w-6 lg:h-9 lg:w-9" glow={isSelected && type === "uv"} />
-              <span className="text-xl font-medium transition lg:text-3xl" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
-              <span className={`text-2xl leading-none transition lg:text-3xl ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
+              <IconMask src={overlayIcons[type]} color={color} className="h-9 w-9" glow={isSelected && type === "uv"} />
+              <span className="text-3xl font-medium transition" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
+              <span className={`text-3xl leading-none transition ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
             </div>
             );
           })}
