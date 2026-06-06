@@ -568,7 +568,7 @@ function DownloadFooter() {
       <div className="relative flex min-h-[52vh] items-center justify-center overflow-hidden px-5 py-24 text-center md:px-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(244,182,94,0.16),transparent_30%),radial-gradient(circle_at_28%_62%,rgba(101,171,227,0.14),transparent_34%),linear-gradient(180deg,#211E49_0%,#17152F_100%)]" />
         <div className="relative mx-auto max-w-4xl">
-          <h2 className="text-5xl font-semibold leading-[0.95] tracking-normal md:text-7xl lg:text-8xl">
+          <h2 className="text-4xl font-semibold leading-[1.02] tracking-normal md:text-6xl lg:text-7xl">
             Try Weather Atlas today, completely free.
           </h2>
           <a
@@ -589,7 +589,6 @@ function DownloadFooter() {
               <span className="h-10 w-10 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_28px_rgba(244,182,94,0.45)]" />
               <p className="text-4xl font-semibold tracking-normal">Weather Atlas</p>
             </div>
-            <p className="mt-7 max-w-sm text-xl leading-8 text-weather-muted/70">Weather, on a map.</p>
             <a
               className="mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-weather-light px-7 text-base font-semibold text-[#2E2961] shadow-bloom"
               href="#"
@@ -599,20 +598,14 @@ function DownloadFooter() {
             </a>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold">Support</h3>
-            <nav className="mt-6 flex flex-col gap-5 text-lg text-weather-muted/70">
+          <div className="md:pt-2">
+            <nav className="flex flex-col gap-5 text-lg text-weather-muted/70">
               {links.map(([label, href]) => (
                 <a key={label} href={href} className="transition hover:text-weather-text">
                   {label}
                 </a>
               ))}
             </nav>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold">Download</h3>
-            <p className="mt-6 max-w-xs text-lg leading-8 text-weather-muted/70">A small, private weather atlas for the places you care about.</p>
           </div>
         </div>
       </footer>
