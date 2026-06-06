@@ -68,12 +68,6 @@ const backgroundDots = [
   [28.98, 41.01, "#65ABE3"]
 ];
 
-const appNotes = [
-  ["Free", "Completely free to use."],
-  ["Fast", "Native performance on iPhone, iPad, and Mac."],
-  ["Private", "Weather Atlas does not collect any personal information."]
-];
-
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const publicAsset = (path) => `${publicBasePath}${path}`;
 
@@ -563,175 +557,6 @@ function ScrollCopy({ activeStep }) {
   );
 }
 
-function NativeMapPreview() {
-  const mapNode = useRef(null);
-  const map = useRef(null);
-  const [projectedPreviewDots, setProjectedPreviewDots] = useState([]);
-  const previewDots = [
-    [-9.14, 38.72, "#F4B65E"],
-    [-0.13, 51.51, "#65ABE3"],
-    [13.4, 52.52, "#FF8A65", true],
-    [23.73, 37.98, "#F4B65E"],
-    [2.35, 48.86, "#65ABE3"],
-    [4.9, 52.37, "#4D70D4"],
-    [12.5, 41.9, "#FF8A65"],
-    [16.37, 48.21, "#F4B65E"],
-    [28.98, 41.01, "#65ABE3"],
-    [-3.7, 40.42, "#F4B65E"]
-  ];
-
-  useEffect(() => {
-    if (!mapNode.current || map.current) return;
-    const testCanvas = document.createElement("canvas");
-    const hasWebGl = Boolean(testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"));
-    if (!hasWebGl) return;
-
-    const projectPreviewDots = () => {
-      if (!map.current) return;
-      setProjectedPreviewDots(
-        previewDots.map(([lng, lat, color, selected]) => {
-          const point = map.current.project([lng, lat]);
-          return { x: point.x, y: point.y, color, selected };
-        })
-      );
-    };
-
-    try {
-      map.current = new maplibregl.Map({
-        container: mapNode.current,
-        style: "https://tiles.openfreemap.org/styles/dark",
-        center: [13, 52],
-        zoom: 3.25,
-        attributionControl: false,
-        interactive: false,
-        pitch: 0,
-        bearing: 0
-      });
-    } catch {
-      return;
-    }
-
-    map.current.once("load", () => {
-      applyMinimalMapStyle(map.current);
-      map.current.resize();
-      projectPreviewDots();
-    });
-    map.current.once("idle", projectPreviewDots);
-    map.current.on("move", projectPreviewDots);
-    map.current.on("resize", projectPreviewDots);
-
-    return () => {
-      map.current?.off("move", projectPreviewDots);
-      map.current?.off("resize", projectPreviewDots);
-      map.current?.remove();
-      map.current = null;
-    };
-  }, []);
-
-  return (
-    <div className="relative min-h-[560px] overflow-hidden bg-[#2E2961]">
-      <div ref={mapNode} className="absolute inset-0 opacity-100" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(46,41,97,0.04),rgba(20,18,46,0.18))]" />
-      {projectedPreviewDots.map(({ x, y, color, selected }, index) => (
-        <span
-          key={`${x}-${y}-${index}`}
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: x,
-            top: y,
-            opacity: selected ? 1 : 0.22,
-            filter: selected ? "none" : "grayscale(1)"
-          }}
-        >
-          {selected ? (
-            <span className="relative inline-flex h-10 w-10 items-center justify-center">
-              <span className="absolute h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(255,138,101,0.34)_0%,rgba(255,138,101,0.16)_32%,rgba(255,138,101,0)_72%)] blur-sm" />
-              <span className="absolute h-20 w-20 rounded-full bg-[#FF8A65]/20 blur-2xl" />
-              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_38px_rgba(255,138,101,0.78)]" />
-            </span>
-          ) : (
-            <span
-              className="block h-3.5 w-3.5 rounded-full border border-white/10"
-              style={{ background: color, boxShadow: "0 0 14px rgba(211, 227, 236, 0.16)" }}
-            />
-          )}
-        </span>
-      ))}
-      <div className="absolute bottom-6 right-6 w-[430px] max-w-[calc(100%-48px)] rounded-[24px] border border-[#6F67C8]/50 bg-[#211E49]/96 px-7 pb-5 pt-6 text-weather-text shadow-[0_22px_70px_rgba(10,8,31,0.34)] backdrop-blur-2xl">
-        <div className="grid grid-cols-[1fr_auto] items-stretch gap-8">
-          <div>
-            <p className="text-5xl font-semibold leading-none tracking-normal">20°</p>
-            <p className="mt-4 text-sm font-medium text-weather-cloud/72">Current Temperature</p>
-            <p className="mt-3 text-xl font-semibold">Berlin</p>
-          </div>
-          <div className="flex min-w-[118px] flex-col items-end justify-between pb-0.5 pt-1">
-            <span className="mr-[18px] mt-6 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
-            <div className="grid grid-cols-5 gap-1.5">
-              {["#F4B65E", "#6E83B6", "#D3E3EC", "#D3E3EC", "#D9826F", "#D9826F", "#E99573", "#E99573", "#E99573", "#D9826F"].map((color, index) => (
-                <span key={index} className="h-2 w-2 rounded-full" style={{ background: color, opacity: index < 5 ? 0.78 : 0.9 }} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AppReveal() {
-  return (
-    <section className="relative z-20 -mt-[16vh] px-5 pb-24 pt-28 md:px-10 md:pt-36 lg:px-16">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-12 max-w-3xl">
-          <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">
-            Simple and powerful.
-          </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-weather-muted/68">
-            Built with native iOS technologies for the best performance.
-          </p>
-        </div>
-
-        <div className="grid min-h-[680px] overflow-hidden rounded-[34px] border border-white/10 bg-[#201D42]/72 shadow-atmospheric backdrop-blur-2xl lg:grid-cols-[330px_1fr]">
-          <aside className="border-b border-white/10 bg-[#2E2961]/60 p-5 lg:border-b-0 lg:border-r">
-            <div className="mb-8">
-              <p className="text-sm font-semibold text-weather-text">Saved Places</p>
-            </div>
-            <div className="space-y-3">
-              {storyCities.slice(0, 3).map((city) => (
-                <div key={city.name} className="rounded-[22px] border border-white/10 bg-[#423D74]/70 p-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="h-3.5 w-3.5 rounded-full border border-white/20"
-                        style={{ background: city.color, boxShadow: `0 0 18px ${city.color}` }}
-                      />
-                      <div>
-                        <p className="font-medium text-weather-text">{city.name}</p>
-                      </div>
-                    </div>
-                    <p className="text-2xl font-semibold text-weather-text">{city.temp}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </aside>
-
-          <NativeMapPreview />
-        </div>
-
-        <div className="mt-16 grid gap-5 md:grid-cols-3">
-          {appNotes.map(([title, body]) => (
-            <div key={title} className="border-t border-white/12 pt-5">
-              <h3 className="text-base font-semibold text-weather-text">{title}</h3>
-              <p className="mt-3 text-sm leading-6 text-weather-muted/62">{body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function DownloadFooter() {
   const links = [
     ["Contact", publicAsset("/contact/")],
@@ -786,7 +611,6 @@ export default function LandingPage() {
       <ScrollCopy activeStep={activeStep} />
       <div className="relative z-10 h-[1200vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
-        <AppReveal />
         <DownloadFooter />
       </div>
     </main>
