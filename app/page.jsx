@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import maplibregl from "maplibre-gl";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -242,8 +242,8 @@ function StoryMap({ progress, activeStep }) {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    const heldProgress = Math.max(0, (timeProgress - 0.24) / 0.76);
-    const nextFrame = heldProgress < 0.36 ? 0 : heldProgress < 0.62 ? 1 : 2;
+    const heldProgress = Math.max(0, (timeProgress - 0.1) / 0.9);
+    const nextFrame = heldProgress < 0.32 ? 0 : heldProgress < 0.64 ? 1 : 2;
     setDateFrame(nextFrame);
   });
 
@@ -455,7 +455,7 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-240px] top-[28vh] z-20 h-[42vh] w-[430px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
+        className="absolute right-[-270px] top-[28vh] z-20 h-[42vh] w-[430px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
         animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
@@ -476,11 +476,20 @@ function StoryMap({ progress, activeStep }) {
         animate={{ opacity: overlaySwitcherOpacity, filter: overlaySwitcherOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="flex items-center gap-3 lg:hidden">
-          <IconMask src={overlayIcons[selectedOverlay]} color={selectedOverlayColor} className="h-6 w-6" glow={selectedOverlay === "uv"} />
-          <span className="whitespace-nowrap text-xl font-semibold" style={{ color: selectedOverlayColor }}>{selectedOverlayLabel}</span>
-          <span className="text-2xl leading-none" style={{ color: selectedOverlayColor }}>✓</span>
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedOverlay}
+            className="flex items-center gap-3 lg:hidden"
+            initial={{ opacity: 0, y: 8, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <IconMask src={overlayIcons[selectedOverlay]} color={selectedOverlayColor} className="h-6 w-6" glow={selectedOverlay === "uv"} />
+            <span className="whitespace-nowrap text-xl font-semibold" style={{ color: selectedOverlayColor }}>{selectedOverlayLabel}</span>
+            <span className="text-2xl leading-none" style={{ color: selectedOverlayColor }}>✓</span>
+          </motion.div>
+        </AnimatePresence>
         <div className="hidden space-y-6 lg:block">
           {overlayOptions.map(([type, label]) => {
             const isSelected = selectedOverlay === type;
